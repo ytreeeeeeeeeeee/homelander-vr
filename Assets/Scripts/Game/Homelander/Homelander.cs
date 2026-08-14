@@ -10,17 +10,12 @@ namespace Game.Homelander
         {
             if (SkyworthVrInput.GetButton(SkyworthVrButton.Confirm))
             {
-               Shoot();
+               head.ShootOutOfEyes();
             }
             else
             {
                 head.StopShooting();
             }
-        }
-
-        private void Shoot()
-        {
-             head.ShootOutOfEyes();
         }
     }
 }

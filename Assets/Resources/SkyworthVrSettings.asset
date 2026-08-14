@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a6715bd14f4895a01444b3915abde2, type: 3}
   m_Name: SkyworthVrSettings
   m_EditorClassIdentifier: 
-  screenWidth: 1920
-  screenHeight: 1080
+  screenWidth: 1440
+  screenHeight: 810
   refreshRate: 72
   targetFrameRate: 72

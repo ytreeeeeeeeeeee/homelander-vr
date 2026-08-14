@@ -1,14 +1,15 @@
 using UnityEngine;
-using UnityEngine.Video;
+using UnityEngine.UI;
 
 namespace Game.UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class HomelanderEditCanvas : MonoBehaviour
+    public class EyeCanvas : MonoBehaviour
     {
         [HideInInspector] public Camera targetCamera;
         
         [SerializeField] private float distance;
+        [SerializeField] public RawImage editSurface;
         
         private RectTransform _rectTransform;
         

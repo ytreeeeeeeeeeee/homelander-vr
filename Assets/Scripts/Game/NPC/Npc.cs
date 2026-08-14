@@ -52,7 +52,7 @@ namespace Game.NPC
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             NpcManager.Instance.Remove(_collider);
         }

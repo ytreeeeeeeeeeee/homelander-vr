@@ -8,15 +8,16 @@ namespace Game.UI
 {
     public class HomelanderEditVideoController : MonoBehaviour
     {
-        [SerializeField] private HomelanderEditCanvas editCanvasPrefab;
+        [SerializeField] private EyeCanvas editCanvasPrefab;
         [SerializeField] private VideoPlayer editVideoPlayer;
         [SerializeField] private float fadeInTime = 1f;
+        [SerializeField] private AudioSource videoAudioSource;
         
         public static HomelanderEditVideoController Instance;
         
         public event Action OnOneSecondToEndEdit;
 
-        private readonly List<HomelanderEditCanvas> _eyeEditCanvases = new();
+        private readonly List<EyeCanvas> _eyeCanvases = new();
         private bool _isEditEndEventGenerated = false;
 
         private void Awake()
@@ -28,6 +29,9 @@ namespace Game.UI
         {
             SkyworthVrRig.EyeCameraCreated += OnCameraCreated;
             GameController.Instance.OnGameWin +=  PlayEdit;
+            editVideoPlayer.loopPointReached += OnVideoFinished;
+
+            videoAudioSource.ignoreListenerPause =  true;
         }
 
         private void Update()
@@ -39,21 +43,24 @@ namespace Game.UI
         {
             SkyworthVrRig.EyeCameraCreated -= OnCameraCreated;
             GameController.Instance.OnGameWin -= PlayEdit;
+            editVideoPlayer.loopPointReached -= OnVideoFinished;
         }
 
         private void PlayEdit()
         {
-            _eyeEditCanvases.ForEach(editCanvas => editCanvas.gameObject.SetActive(true));
+            AudioListener.pause = true;
+            
+            _eyeCanvases.ForEach(editCanvas => editCanvas.gameObject.SetActive(true));
             editVideoPlayer.Play();
         }
 
         private void OnCameraCreated(SkyworthEye eye, Camera cam)
         {
-            HomelanderEditCanvas eyeEditCanvas = Instantiate(editCanvasPrefab, cam.transform);
+            EyeCanvas eyeEditCanvas = Instantiate(editCanvasPrefab, cam.transform);
             eyeEditCanvas.targetCamera = cam;
             eyeEditCanvas.gameObject.SetActive(false);
             
-            _eyeEditCanvases.Add(eyeEditCanvas);
+            _eyeCanvases.Add(eyeEditCanvas);
         }
         
         private void ControlEditFading()
@@ -97,6 +104,11 @@ namespace Game.UI
             }
             
             editVideoPlayer.SetDirectAudioVolume(0, 0f);
+        }
+
+        private void OnVideoFinished(VideoPlayer _)
+        {
+            AudioListener.pause = false;
         }
     }
 }
