@@ -1,4 +1,3 @@
-using System;
 using Game.NPC;
 using Game.UI;
 using UnityEngine;
