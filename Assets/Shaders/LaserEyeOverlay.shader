@@ -2,177 +2,131 @@ Shader "Custom/LaserEyeOverlay"
 {
     Properties
     {
-        _Color ("Color", Color) = (1, 0, 0, 1)
-
-        _Intensity ("Intensity", Range(0, 3)) = 1
-        _Thickness ("Thickness", Range(0.01, 0.5)) = 0.18
-        _Softness ("Softness", Range(0.001, 0.5)) = 0.12
-
-        _PulseSpeed ("Pulse Speed", Range(0, 30)) = 8
-        _PulseAmount ("Pulse Amount", Range(0, 1)) = 0.1
-
-        _NoiseScale ("Noise Scale", Range(1, 100)) = 20
-        _NoiseSpeed ("Noise Speed", Range(0, 10)) = 2
-        _NoiseAmount ("Noise Amount", Range(0, 1)) = 0.15
-
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1, 0, 0, 1)
+
+        _Intensity ("Intensity", Range(0, 2)) = 1
+        _MaxAlpha ("Max Alpha", Range(0, 1)) = 0.45
+
+        _RadiusX ("Clear Radius X", Range(0.1, 1.5)) = 0.55
+        _RadiusY ("Clear Radius Y", Range(0.1, 1.5)) = 0.38
+        _FadeWidth ("Fade Width", Range(0.01, 1.0)) = 0.35
+
+        _PulseSpeed ("Pulse Speed", Range(0, 20)) = 4
+        _PulseAmount ("Pulse Amount", Range(0, 1)) = 0.12
+
+        _WaveFrequency ("Wave Frequency", Range(0, 40)) = 14
+        _WaveSpeed ("Wave Speed", Range(0, 20)) = 5
+        _WaveAmount ("Wave Amount", Range(0, 1)) = 0.10
     }
 
     SubShader
     {
         Tags
         {
-            "Queue" = "Transparent"
-            "IgnoreProjector" = "True"
-            "RenderType" = "Transparent"
-            "PreviewType" = "Plane"
-            "CanUseSpriteAtlas" = "True"
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
+            "PreviewType"="Plane"
+            "CanUseSpriteAtlas"="True"
         }
 
         Cull Off
         Lighting Off
         ZWrite Off
         ZTest [unity_GUIZTestMode]
-
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
             CGPROGRAM
-
             #pragma vertex vert
             #pragma fragment frag
 
             #include "UnityCG.cginc"
 
+            sampler2D _MainTex;
+            fixed4 _Color;
+
+            float _Intensity;
+            float _MaxAlpha;
+
+            float _RadiusX;
+            float _RadiusY;
+            float _FadeWidth;
+
+            float _PulseSpeed;
+            float _PulseAmount;
+
+            float _WaveFrequency;
+            float _WaveSpeed;
+            float _WaveAmount;
+
             struct appdata_t
             {
-                float4 vertex : POSITION;
-                float4 color : COLOR;
+                float4 vertex   : POSITION;
+                float4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
             };
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
-                fixed4 color : COLOR;
-                float2 uv : TEXCOORD0;
+                float4 vertex   : SV_POSITION;
+                float4 color    : COLOR;
+                float2 uv       : TEXCOORD0;
             };
-
-            sampler2D _MainTex;
-
-            fixed4 _Color;
-
-            float _Intensity;
-            float _Thickness;
-            float _Softness;
-
-            float _PulseSpeed;
-            float _PulseAmount;
-
-            float _NoiseScale;
-            float _NoiseSpeed;
-            float _NoiseAmount;
-
 
             v2f vert(appdata_t v)
             {
                 v2f o;
-
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.texcoord;
                 o.color = v.color;
-
                 return o;
             }
-
-
-            float Random(float2 p)
-            {
-                return frac(
-                    sin(dot(p, float2(12.9898, 78.233))) *
-                    43758.5453
-                );
-            }
-
-
-            float Noise(float2 uv)
-            {
-                float2 i = floor(uv);
-                float2 f = frac(uv);
-
-                float a = Random(i);
-                float b = Random(i + float2(1.0, 0.0));
-                float c = Random(i + float2(0.0, 1.0));
-                float d = Random(i + float2(1.0, 1.0));
-
-                float2 smoothF = f * f * (3.0 - 2.0 * f);
-
-                return lerp(
-                    lerp(a, b, smoothF.x),
-                    lerp(c, d, smoothF.x),
-                    smoothF.y
-                );
-            }
-
 
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
 
-                float2 centeredUv = uv - 0.5;
+                // Переводим UV в диапазон [-0.5 .. 0.5]
+                float2 p = uv - 0.5;
 
-                // Сохраняем круглую форму независимо
-                // от соотношения сторон Canvas.
-                centeredUv.x *= _ScreenParams.x / _ScreenParams.y;
+                // Нормализуем под эллипс:
+                // внутри "чистой зоны" значение < 1
+                float2 ellipse;
+                ellipse.x = p.x / _RadiusX;
+                ellipse.y = p.y / _RadiusY;
 
-                float distanceFromCenter = length(centeredUv);
+                float d = length(ellipse);
 
-                float innerRadius = 0.35;
-                float outerRadius = innerRadius + _Thickness;
+                // Базовая маска:
+                // 0 в центре, затем плавно возрастает к краям
+                float baseMask = smoothstep(1.0, 1.0 + _FadeWidth, d);
 
-                float edge = smoothstep(
-                    innerRadius,
-                    outerRadius,
-                    distanceFromCenter
-                );
+                // Пульсация
+                float pulse = 1.0 + sin(_Time.y * _PulseSpeed) * _PulseAmount;
 
-                float2 noiseUv =
-                    uv * _NoiseScale +
-                    float2(
-                        _Time.y * _NoiseSpeed,
-                        _Time.y * _NoiseSpeed * 0.73
-                    );
+                // Волны:
+                // начинаются от границы "чистой зоны" и идут наружу
+                float wavePhase = (d - 1.0) * _WaveFrequency - _Time.y * _WaveSpeed;
+                float wave = 1.0 + sin(wavePhase) * _WaveAmount;
 
-                float noise = Noise(noiseUv);
+                // Чтобы волны не шумели в центре, усиливаем их только там,
+                // где уже есть покраснение
+                wave = lerp(1.0, wave, baseMask);
 
-                noise = lerp(
-                    1.0,
-                    noise,
-                    _NoiseAmount
-                );
+                float alpha = baseMask * pulse * wave * _Intensity * _MaxAlpha;
+                alpha = saturate(alpha);
 
-                float pulse =
-                    1.0 +
-                    sin(_Time.y * _PulseSpeed) *
-                    _PulseAmount;
+                fixed4 col = _Color;
+                col.a *= alpha;
 
-                float alpha =
-                    edge *
-                    noise *
-                    pulse *
-                    _Intensity;
+                // Учитываем цвет UI-элемента
+                col *= i.color;
 
-                fixed4 color = _Color;
-
-                color.rgb *= _Intensity;
-                color.a *= alpha;
-
-                color *= i.color;
-
-                return color;
+                return col;
             }
-
             ENDCG
         }
     }

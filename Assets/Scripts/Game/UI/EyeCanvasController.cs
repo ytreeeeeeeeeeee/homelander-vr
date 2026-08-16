@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Homelander;
 using UnityEngine;
 using UnityEngine.Video;
 
 namespace Game.UI
 {
-    public class HomelanderEditVideoController : MonoBehaviour
+    public class EyeCanvasController : MonoBehaviour
     {
-        [SerializeField] private EyeCanvas editCanvasPrefab;
+        [SerializeField] private EyeCanvas eyeCanvasPrefab;
         [SerializeField] private VideoPlayer editVideoPlayer;
         [SerializeField] private float fadeInTime = 1f;
         [SerializeField] private AudioSource videoAudioSource;
         
-        public static HomelanderEditVideoController Instance;
+        public static EyeCanvasController Instance;
         
         public event Action OnOneSecondToEndEdit;
 
@@ -50,17 +51,33 @@ namespace Game.UI
         {
             AudioListener.pause = true;
             
-            _eyeCanvases.ForEach(editCanvas => editCanvas.gameObject.SetActive(true));
+            DisableLaserOverlay();
+            
+            _eyeCanvases.ForEach(eyeCanvas => eyeCanvas.editSurface.gameObject.SetActive(true));
             editVideoPlayer.Play();
+        }
+
+        public void DrawLaserOverlay()
+        {
+            if (editVideoPlayer.isPlaying)
+            {
+                return;
+            }
+            
+            _eyeCanvases.ForEach(eyeCanvas => eyeCanvas.laserOverlay.gameObject.SetActive(true));
+        }
+
+        public void DisableLaserOverlay()
+        {
+            _eyeCanvases.ForEach(eyeCanvas => eyeCanvas.laserOverlay.gameObject.SetActive(false));
         }
 
         private void OnCameraCreated(SkyworthEye eye, Camera cam)
         {
-            EyeCanvas eyeEditCanvas = Instantiate(editCanvasPrefab, cam.transform);
-            eyeEditCanvas.targetCamera = cam;
-            eyeEditCanvas.gameObject.SetActive(false);
+            EyeCanvas eyeCanvas = Instantiate(eyeCanvasPrefab, cam.transform);
+            eyeCanvas.targetCamera = cam;
             
-            _eyeCanvases.Add(eyeEditCanvas);
+            _eyeCanvases.Add(eyeCanvas);
         }
         
         private void ControlEditFading()

@@ -9,7 +9,8 @@ namespace Game.UI
         [HideInInspector] public Camera targetCamera;
         
         [SerializeField] private float distance;
-        [SerializeField] public RawImage editSurface;
+        [SerializeField] public GameObject editSurface;
+        [SerializeField] public GameObject laserOverlay;
         
         private RectTransform _rectTransform;
         

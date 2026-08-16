@@ -19,13 +19,13 @@ namespace Game
         private void Start()
         {
             NpcManager.Instance.OnAllNpcKilled += WinGame;
-            HomelanderEditVideoController.Instance.OnOneSecondToEndEdit += StartLoadingMainMenu;
+            EyeCanvasController.Instance.OnOneSecondToEndEdit += StartLoadingMainMenu;
         }
 
         private void OnDisable()
         {
             NpcManager.Instance.OnAllNpcKilled -= WinGame;
-            HomelanderEditVideoController.Instance.OnOneSecondToEndEdit -= StartLoadingMainMenu;
+            EyeCanvasController.Instance.OnOneSecondToEndEdit -= StartLoadingMainMenu;
         }
     
         private void WinGame()

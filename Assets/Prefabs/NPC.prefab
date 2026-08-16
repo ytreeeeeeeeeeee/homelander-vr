@@ -84,4 +84,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxNextPointDistance: 20
   maxNextPointCooldown: 5
+  bloodPrefab: {fileID: 198000014159833656, guid: a3768c8a9d1b90d4bb0eb0e4bdbe730c, type: 3}
   model: {fileID: 0}

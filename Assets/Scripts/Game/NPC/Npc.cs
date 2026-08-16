@@ -11,7 +11,7 @@ namespace Game.NPC
         [SerializeField] private float maxNextPointDistance = 20f;
         [SerializeField] private float maxNextPointCooldown = 5f;
 
-        public GameObject model;
+        [HideInInspector] public GameObject model;
         
         private NavMeshAgent _agent;
         private Animator _animator;

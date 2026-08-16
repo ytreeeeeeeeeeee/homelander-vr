@@ -2375,7 +2375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ddb530dd03d6324386654f98dbe4adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  editCanvasPrefab: {fileID: 579021724937749150, guid: b7e32dd2c8acbf34c83f1d403f2bcdb4, type: 3}
+  eyeCanvasPrefab: {fileID: 579021724937749150, guid: b7e32dd2c8acbf34c83f1d403f2bcdb4, type: 3}
   editVideoPlayer: {fileID: 793617664}
   fadeInTime: 1
   videoAudioSource: {fileID: 793617666}
@@ -2502,12 +2502,12 @@ GameObject:
   - component: {fileID: 2072274642}
   - component: {fileID: 2072274641}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: FPSCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2072274641
 MonoBehaviour:
   m_ObjectHideFlags: 0
