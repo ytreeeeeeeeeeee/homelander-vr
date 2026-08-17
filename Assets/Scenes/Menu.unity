@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eca9c18a4832a241a0de4949481448c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLoading: 0
 --- !u!4 &180519901
 Transform:
   m_ObjectHideFlags: 0
@@ -225,7 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eddb3537f1ac324e8d4663be575277e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 180519900}
 --- !u!1 &283103337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,7 +1157,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2043922872}
   - component: {fileID: 2043922871}
-  - component: {fileID: 2043922870}
   - component: {fileID: 2043922869}
   m_Layer: 5
   m_Name: MenuCanvas
@@ -1183,29 +1182,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &2043922870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2043922868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
 --- !u!223 &2043922871
 Canvas:
   m_ObjectHideFlags: 0
