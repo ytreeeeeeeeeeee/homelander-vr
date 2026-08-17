@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Homelander;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -72,10 +71,10 @@ namespace Game.UI
             _eyeCanvases.ForEach(eyeCanvas => eyeCanvas.laserOverlay.gameObject.SetActive(false));
         }
 
-        private void OnCameraCreated(SkyworthEye eye, Camera cam)
+        private void OnCameraCreated(SkyworthEye _, Camera cam)
         {
-            EyeCanvas eyeCanvas = Instantiate(eyeCanvasPrefab, cam.transform);
-            eyeCanvas.targetCamera = cam;
+            EyeCanvas eyeCanvas = Instantiate(eyeCanvasPrefab);
+            eyeCanvas.Canvas.worldCamera = cam;
             
             _eyeCanvases.Add(eyeCanvas);
         }

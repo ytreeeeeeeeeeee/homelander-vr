@@ -1,55 +1,22 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.UI
 {
-    [RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(Canvas))]
     public class EyeCanvas : MonoBehaviour
     {
-        [HideInInspector] public Camera targetCamera;
-        
+        // расстояние, на котором должен находится относительно камеры
+        // на расстоянии ~0.3 canvas перестает отображаться
         [SerializeField] private float distance;
         [SerializeField] public GameObject editSurface;
         [SerializeField] public GameObject laserOverlay;
         
-        private RectTransform _rectTransform;
+        public Canvas Canvas { get; private set; }
         
         private void Awake()
         {
-            _rectTransform = GetComponent<RectTransform>();
-        }
-
-        private void LateUpdate()
-        {
-            FitToCamera();
-        }
-
-        private void FitToCamera()
-        {
-            if (null == targetCamera)
-            {
-                return;
-            }
-            
-            transform.position = targetCamera.transform.position + targetCamera.transform.forward * distance;
-            transform.rotation = targetCamera.transform.rotation;
-
-            float worldHeight;
-            
-            if (targetCamera.orthographic)
-            {
-                worldHeight = targetCamera.orthographicSize * 2f;
-            }
-            else
-            {
-                worldHeight = 2f * distance * Mathf.Tan(targetCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
-            }
-
-            float scale = worldHeight / _rectTransform.rect.height;
-            _rectTransform.localScale = Vector3.one * scale;
-            
-            float requiredWidth = _rectTransform.rect.height * targetCamera.aspect;
-            _rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, requiredWidth);
+            Canvas = GetComponent<Canvas>();
+            Canvas.planeDistance = distance;
         }
     }
 }
