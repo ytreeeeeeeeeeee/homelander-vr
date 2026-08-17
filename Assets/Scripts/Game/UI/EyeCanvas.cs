@@ -16,6 +16,7 @@ namespace Game.UI
         private void Awake()
         {
             Canvas = GetComponent<Canvas>();
+            // устанавливаем расстояние от камеры до canvas
             Canvas.planeDistance = distance;
         }
     }
