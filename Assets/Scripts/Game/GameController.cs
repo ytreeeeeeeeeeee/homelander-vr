@@ -19,13 +19,13 @@ namespace Game
         private void Start()
         {
             NpcManager.Instance.OnAllNpcKilled += WinGame;
-            EyeCanvasController.Instance.OnOneSecondToEndEdit += StartLoadingMainMenu;
+            UIController.Instance.OnOneSecondToEndEdit += StartLoadingMainMenu;
         }
 
         private void OnDisable()
         {
             NpcManager.Instance.OnAllNpcKilled -= WinGame;
-            EyeCanvasController.Instance.OnOneSecondToEndEdit -= StartLoadingMainMenu;
+            UIController.Instance.OnOneSecondToEndEdit -= StartLoadingMainMenu;
         }
     
         private void WinGame()

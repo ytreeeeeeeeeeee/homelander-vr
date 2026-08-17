@@ -54,7 +54,7 @@ namespace Game.Homelander
             laserAudio.Play();
             
             UpdateLasers();
-            EyeCanvasController.Instance.DrawLaserOverlay();
+            UIController.Instance.DrawLaserOverlay();
         }
     
         public void StopShooting()
@@ -112,7 +112,7 @@ namespace Game.Homelander
             _leftLaser.Disable();
             _rightLazer.Disable();
             
-            EyeCanvasController.Instance.DisableLaserOverlay();
+            UIController.Instance.DisableLaserOverlay();
             
             _isLaserActive = false;
         }
