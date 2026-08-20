@@ -145,11 +145,11 @@
       "url": "https://packages.unity.com"
     },
     "com.ytreeeeeeeeeeee.skyworth-vr-plugin": {
-      "version": "https://github.com/ytreeeeeeeeeeee/skyworth-vr-plugin.git",
+      "version": "https://github.com/ytreeeeeeeeeeee/skyworth-vr-plugin.git#v0.2.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "71825fd5e709e1f8f6752fb0dd3c3056a2477960"
+      "hash": "ebbb5d685bfe68c84ea5025517e2e32c9b102299"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
